@@ -1,7 +1,7 @@
 # RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds
 
 Qingyong Hu, Bo Yang, Linhai Xie, Stefano Rosa, Yulan Guo, Zhihua Wang, Niki Trigoni, Andrew Markham. [arXiv:1911.11236](https://arxiv.org/abs/1911.11236), 2019.
-RandLA-Net in Tensorflow, coming soon
+RandLA-Net in Tensorflow, **coming soon**
 
 Introduction
 -------------------
@@ -51,5 +51,9 @@ Quantitative results of different approaches on SemanticKITTI dataset.
 Quantitative results of different approaches on S3DIS dataset.
 
 <p align="center"> <img src="./figs/S3DIS_table.png" width="50%"> </p>
+
+### More Resources
+-------------------
+- [Demo](https://youtu.be/Ar3eY_lwzMk)
 
 
