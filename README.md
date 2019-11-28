@@ -3,6 +3,7 @@
 Qingyong Hu, Bo Yang, Linhai Xie, Stefano Rosa, Yulan Guo, Zhihua Wang, Niki Trigoni, Andrew Markham. [arXiv:1911.11236](https://arxiv.org/abs/1911.11236), 2019.
 RandLA-Net in Tensorflow, **coming soon**
 
+
 Introduction
 -------------------
 
@@ -54,6 +55,7 @@ Quantitative results of different approaches on S3DIS dataset.
 
 ### Demo
 -------------------
+
 <p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="./figs/demo_cover.png" width="50%"></a> </p>
 
 
