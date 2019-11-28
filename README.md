@@ -52,8 +52,8 @@ Quantitative results of different approaches on S3DIS dataset.
 
 <p align="center"> <img src="./figs/S3DIS_table.png" width="50%"> </p>
 
-### More Resources
+### Demo
 -------------------
-- [Demo](https://youtu.be/Ar3eY_lwzMk)
+<p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="./figs/demo_cover.png" width="50%"></a> </p>
 
 
