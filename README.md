@@ -1,3 +1,5 @@
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/191111236/semantic-segmentation-on-semantic3d)](https://paperswithcode.com/sota/semantic-segmentation-on-semantic3d?p=191111236)
+
 # RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds
 
 Qingyong Hu, Bo Yang, Linhai Xie, Stefano Rosa, Yulan Guo, Zhihua Wang, Niki Trigoni, Andrew Markham. [arXiv:1911.11236](https://arxiv.org/abs/1911.11236), 2019.
@@ -19,19 +21,17 @@ The following figure shows the basic building block of our RandLA-Net:
 
 | ![2](./figs/S3DIS_area2.gif)   | ![z](./figs/S3DIS_area3.gif) |
 | ------------------------------ | ---------------------------- |
-| ![zzz](./figs/S3DIS_area6.gif) | ![a](./figs/S3DIS_area1.gif) |
+
 
 ### Semantic3D
 
 | ![z](./figs/Semantic3D-1.gif)    | ![z](./figs/Semantic3D-2.gif)   |
 | -------------------------------- | ------------------------------- |
-| ![zzzz](./figs/Semantic3D-3.gif) | ![zzz](./figs/Semantic3D-4.gif) |
+
 
 ### SemanticKITTI
 
-| ![zzz](./figs/semanticKitti.gif)   |     |
-| ---------------------------------- | --- |
-| ![zzz](./figs/SemanticKITTI-2.gif) |     |
+![zzz](./figs/SemanticKITTI-2.gif)    
 
 ## Quantitative Results
 
