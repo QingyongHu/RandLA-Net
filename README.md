@@ -59,3 +59,14 @@ Quantitative results of different approaches on S3DIS dataset.
 <p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="./figs/demo_cover.png" width="50%"></a> </p>
 
 
+### Citation
+If you find our work useful in your research, please consider citing:
+
+  @article{hu2019randla,
+    title={RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds},
+    author={Hu, Qingyong and Yang, Bo and Xie, Linhai and Rosa, Stefano and Guo, Yulan and Wang, Zhihua and Trigoni, Niki and Markham, Andrew},
+    journal={arXiv preprint arXiv:1911.11236},
+    year={2019}
+  }
+
+
