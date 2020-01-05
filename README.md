@@ -2,7 +2,7 @@
 
 # RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds
 
-Qingyong Hu, Bo Yang, Linhai Xie, Stefano Rosa, Yulan Guo, Zhihua Wang, Niki Trigoni, Andrew Markham. [arXiv:1911.11236](https://arxiv.org/abs/1911.11236), 2019.
+[Qingyong Hu](https://www.cs.ox.ac.uk/people/qingyong.hu/), [Bo Yang](https://yang7879.github.io/), [Linhai Xie](https://www.cs.ox.ac.uk/people/linhai.xie/), [Stefano Rosa](https://www.cs.ox.ac.uk/people/stefano.rosa/), [Yulan Guo](http://yulanguo.me/), [Zhihua Wang](https://www.cs.ox.ac.uk/people/zhihua.wang/), [Niki Trigoni](https://www.cs.ox.ac.uk/people/niki.trigoni/), [Andrew Markham](https://www.cs.ox.ac.uk/people/andrew.markham/). [arXiv:1911.11236](https://arxiv.org/abs/1911.11236), 2019.
 RandLA-Net in Tensorflow, **coming soon**
 
 
