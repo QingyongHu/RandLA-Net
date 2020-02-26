@@ -65,8 +65,8 @@ If you find our work useful in your research, please consider citing:
 	@article{hu2019randla,
 	  title={RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds},
 	  author={Hu, Qingyong and Yang, Bo and Xie, Linhai and Rosa, Stefano and Guo, Yulan and Wang, Zhihua and Trigoni, Niki and Markham, Andrew},
-	  journal={arXiv preprint arXiv:1911.11236},
-	  year={2019}
+	  booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+	  year={2020}
 	}
 
 
