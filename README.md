@@ -51,11 +51,11 @@ python utils/6_fold_cv.py
 
 Quantitative results of different approaches on S3DIS dataset (6-fold cross-validation):
 
-![a](./figsS3DIS_table.png)
+![a](./figs/S3DIS_table.png)
 
 Qualitative results of our RandLA-Net:
 
-| ![2](./figsS3DIS_area2.gif)   | ![z](./figsS3DIS_area3.gif) |
+| ![2](./figs/S3DIS_area2.gif)   | ![z](./figs/S3DIS_area3.gif) |
 | ------------------------------ | ---------------------------- |
 
 
