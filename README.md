@@ -142,8 +142,7 @@ If you find our work useful in your research, please consider citing:
 
 
 ### Acknowledgment
--  Our code uses the <a href="https://github.com/jlblancoc/nanoflann">nanoflann</a> library. 
--  Our code is build upon the recent work <a href="https://github.com/HuguesTHOMAS/KPConv">KPConv</a> (ICCV 2019).
+-  Part of our code refers to <a href="https://github.com/jlblancoc/nanoflann">nanoflann</a> library and the the recent work <a href="https://github.com/HuguesTHOMAS/KPConv">KPConv</a>.
 -  We use <a href="https://www.blender.org/">blender</a> to make the video demo.
 
 
