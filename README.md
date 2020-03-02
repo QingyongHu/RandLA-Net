@@ -20,7 +20,6 @@ This code has been tested with Python 3.5, Tensorflow 1.11, CUDA 9.0 and cuDNN 7
 - Clone the repository 
 ```
 git clone https://github.com/QingyongHu/RandLA-Net && cd RandLA-Net
-export RandLANet=$PWD
 ```
 - Setup python environment
 ```
@@ -28,10 +27,6 @@ conda create -n randlanet python=3.5
 source activate randlanet
 pip install -r helper_requirements.txt
 sh compile_op.sh
-```
-- Add the project to your PYTHONPATH
-```
-export PYTHONPATH=$PWD:$PYTHONPATH
 ```
 
 
@@ -157,5 +152,5 @@ Licensed under the CC BY-NC-SA 4.0 license, see [LICENSE](./LICENSE).
 
 
 ### Updates
-* 28/02/2019: Code available!
+* 02/03/2019: Code available!
 * 15/11/2019: Initial release!
