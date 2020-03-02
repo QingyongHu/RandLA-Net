@@ -1,0 +1,4 @@
+*.sh linguist-language=python
+*.h linguist-language=python
+*.hpp linguist-language=python
+
