@@ -201,7 +201,7 @@ if __name__ == '__main__':
         snap_steps = [int(f[:-5].split('-')[-1]) for f in os.listdir(snap_path) if f[-5:] == '.meta']
         chosen_step = np.sort(snap_steps)[-1]
         chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
-        tester = ModelTester(model, restore_snap=chosen_snap)
+        tester = ModelTester(model, dataset, restore_snap=chosen_snap)
         tester.test(model, dataset)
     else:
 
