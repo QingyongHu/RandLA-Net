@@ -75,7 +75,7 @@ class ModelTester:
                     print('step ' + str(self.idx))
                 self.idx += 1
                 stacked_probs = np.reshape(stacked_probs, [model.config.val_batch_size,
-                                                           model.config.NUM_POINTS,
+                                                           model.config.num_points,
                                                            model.config.num_classes])
                 for j in range(np.shape(stacked_probs)[0]):
                     probs = stacked_probs[j, :, :]
