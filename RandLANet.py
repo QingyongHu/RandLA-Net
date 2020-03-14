@@ -51,6 +51,9 @@ class Network:
         with tf.variable_scope('layers'):
             self.logits = self.inference(self.inputs, self.is_training)
 
+        #####################################################################
+        # Ignore the invalid point (unlabeled) when calculating the loss #
+        #####################################################################
         with tf.variable_scope('loss'):
             self.logits = tf.reshape(self.logits, [-1, config.num_classes])
             self.labels = tf.reshape(self.labels, [-1])
@@ -117,7 +120,8 @@ class Network:
             f_encoder_list.append(f_sampled_i)
         # ###########################Encoder############################
 
-        feature = helper_tf_util.conv2d(f_encoder_list[-1], f_encoder_list[-1].get_shape()[3].value, [1, 1], 'decoder_0',
+        feature = helper_tf_util.conv2d(f_encoder_list[-1], f_encoder_list[-1].get_shape()[3].value, [1, 1],
+                                        'decoder_0',
                                         [1, 1], 'VALID', True, is_training)
 
         # ###########################Decoder############################
@@ -126,7 +130,7 @@ class Network:
             f_interp_i = self.nearest_interpolation(feature, inputs['interp_idx'][-j - 1])
             f_decoder_i = helper_tf_util.conv2d_transpose(tf.concat([f_encoder_list[-j - 2], f_interp_i], axis=3),
                                                           f_encoder_list[-j - 2].get_shape()[-1].value, [1, 1],
-                                                   'Decoder_layer_' + str(j), [1, 1], 'VALID', bn=True,
+                                                          'Decoder_layer_' + str(j), [1, 1], 'VALID', bn=True,
                                                           is_training=is_training)
             feature = f_decoder_i
             f_decoder_list.append(f_decoder_i)
@@ -268,8 +272,8 @@ class Network:
         f_pc = self.building_block(xyz, f_pc, neigh_idx, d_out // 2, name + 'LFA', is_training)
         f_pc = helper_tf_util.conv2d(f_pc, d_out * 2, [1, 1], name + 'mlp2', [1, 1], 'VALID', True, is_training,
                                      activation_fn=None)
-        shortcut = helper_tf_util.conv2d(feature, d_out * 2, [1, 1], name + 'shortcut', [1, 1], 'VALID', activation_fn=None,
-                                         bn=True, is_training=is_training)
+        shortcut = helper_tf_util.conv2d(feature, d_out * 2, [1, 1], name + 'shortcut', [1, 1], 'VALID',
+                                         activation_fn=None, bn=True, is_training=is_training)
         return tf.nn.leaky_relu(f_pc + shortcut)
 
     def building_block(self, xyz, feature, neigh_idx, d_out, name, is_training):

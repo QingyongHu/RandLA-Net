@@ -14,8 +14,19 @@ class S3DIS:
     def __init__(self, test_area_idx):
         self.name = 'S3DIS'
         self.path = '/data/S3DIS'
-        self.label_to_names = {0: 'ceiling', 1: 'floor', 2: 'wall', 3: 'beam', 4: 'column', 5: 'window', 6: 'door',
-                               7: 'table', 8: 'chair', 9: 'sofa', 10: 'bookcase', 11: 'board', 12: 'clutter'}
+        self.label_to_names = {0: 'ceiling',
+                               1: 'floor',
+                               2: 'wall',
+                               3: 'beam',
+                               4: 'column',
+                               5: 'window',
+                               6: 'door',
+                               7: 'table',
+                               8: 'chair',
+                               9: 'sofa',
+                               10: 'bookcase',
+                               11: 'board',
+                               12: 'clutter'}
         self.num_classes = len(self.label_to_names)
         self.label_values = np.sort([k for k, v in self.label_to_names.items()])
         self.label_to_idx = {l: i for i, l in enumerate(self.label_values)}
@@ -24,7 +35,7 @@ class S3DIS:
         self.val_split = 'Area_' + str(test_area_idx)
         self.all_files = glob.glob(join(self.path, 'original_ply', '*.ply'))
 
-        # initialize
+        # Initiate containers
         self.val_proj = []
         self.val_labels = []
         self.possibility = {}
@@ -68,7 +79,6 @@ class S3DIS:
         print('\nPreparing reprojected indices for testing')
 
         # Get validation and test reprojected indices
-
         for i, file_path in enumerate(self.all_files):
             t0 = time.time()
             cloud_name = file_path.split('/')[-1][:-4]
@@ -82,30 +92,31 @@ class S3DIS:
                 self.val_labels += [labels]
                 print('{:s} done in {:.1f}s'.format(cloud_name, time.time() - t0))
 
+    # Generate the input data flow
     def get_batch_gen(self, split):
         if split == 'training':
             num_per_epoch = cfg.train_steps * cfg.batch_size
         elif split == 'validation':
             num_per_epoch = cfg.val_steps * cfg.val_batch_size
 
-        # Reset possibility
         self.possibility[split] = []
         self.min_possibility[split] = []
+        # Random initialize
         for i, tree in enumerate(self.input_colors[split]):
             self.possibility[split] += [np.random.rand(tree.data.shape[0]) * 1e-3]
             self.min_possibility[split] += [float(np.min(self.possibility[split][-1]))]
 
         def spatially_regular_gen():
             # Generator loop
-            for i in range(num_per_epoch):  # num_per_epoch
+            for i in range(num_per_epoch):
 
-                # Choose a random cloud
+                # Choose the cloud with the lowest probability
                 cloud_idx = int(np.argmin(self.min_possibility[split]))
 
-                # choose the point with the minimum of possibility as query point
+                # choose the point with the minimum of possibility in the cloud as query point
                 point_ind = np.argmin(self.possibility[split][cloud_idx])
 
-                # Get points from tree structure
+                # Get all points within the cloud from tree structure
                 points = np.array(self.input_trees[split][cloud_idx].data, copy=False)
 
                 # Center point of input region
@@ -115,23 +126,29 @@ class S3DIS:
                 noise = np.random.normal(scale=cfg.noise_init / 10, size=center_point.shape)
                 pick_point = center_point + noise.astype(center_point.dtype)
 
+                # Check if the number of points in the selected cloud is less than the predefined num_points
                 if len(points) < cfg.num_points:
+                    # Query all points within the cloud
                     queried_idx = self.input_trees[split][cloud_idx].query(pick_point, k=len(points))[1][0]
                 else:
+                    # Query the predefined number of points
                     queried_idx = self.input_trees[split][cloud_idx].query(pick_point, k=cfg.num_points)[1][0]
 
+                # Shuffle index
                 queried_idx = DP.shuffle_idx(queried_idx)
-                # Collect points and colors
+                # Get corresponding points and colors based on the index
                 queried_pc_xyz = points[queried_idx]
                 queried_pc_xyz = queried_pc_xyz - pick_point
                 queried_pc_colors = self.input_colors[split][cloud_idx][queried_idx]
                 queried_pc_labels = self.input_labels[split][cloud_idx][queried_idx]
 
+                # Update the possibility of the selected points
                 dists = np.sum(np.square((points[queried_idx] - pick_point).astype(np.float32)), axis=1)
                 delta = np.square(1 - dists / np.max(dists))
                 self.possibility[split][cloud_idx][queried_idx] += delta
                 self.min_possibility[split][cloud_idx] = float(np.min(self.possibility[split][cloud_idx]))
 
+                # up_sampled with replacement
                 if len(points) < cfg.num_points:
                     queried_pc_xyz, queried_pc_colors, queried_idx, queried_pc_labels = \
                         DP.data_aug(queried_pc_xyz, queried_pc_colors, queried_pc_labels, queried_idx, cfg.num_points)
@@ -150,7 +167,7 @@ class S3DIS:
 
     @staticmethod
     def get_tf_mapping2():
-
+        # Collect flat inputs
         def tf_map(batch_xyz, batch_features, batch_labels, batch_pc_idx, batch_cloud_idx):
             batch_features = tf.concat([batch_xyz, batch_features], axis=-1)
             input_points = []
@@ -232,14 +249,17 @@ if __name__ == '__main__':
         tester = ModelTester(model, dataset, restore_snap=chosen_snap)
         tester.test(model, dataset)
     else:
+        ##################
+        # Visualize data #
+        ##################
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
             sess.run(dataset.train_init_op)
             while True:
-                data_list = sess.run(dataset.flat_inputs)
-                xyz = data_list[0]
-                sub_xyz = data_list[1]
-                label = data_list[21]
-                Plot.draw_pc_sem_ins(xyz[0, :, :], label[0, :], fix_color_num=14)
-                Plot.draw_pc_sem_ins(sub_xyz[0, :, :], label[0, 0:np.shape(sub_xyz)[1]], fix_color_num=14)
+                flat_inputs = sess.run(dataset.flat_inputs)
+                pc_xyz = flat_inputs[0]
+                sub_pc_xyz = flat_inputs[1]
+                labels = flat_inputs[21]
+                Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :], cfg.num_classes + 1)
+                Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]], cfg.num_classes + 1)

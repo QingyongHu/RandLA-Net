@@ -13,10 +13,25 @@ class SemanticKITTI:
     def __init__(self, test_id):
         self.name = 'SemanticKITTI'
         self.dataset_path = '/data/semantic_kitti/dataset/sequences_0.06'
-        self.label_to_names = {0: 'unlabeled', 1: 'car', 2: 'bicycle', 3: 'motorcycle', 4: 'truck',
-                               5: 'other-vehicle', 6: 'person', 7: 'bicyclist', 8: 'motorcyclist',
-                               9: 'road', 10: 'parking', 11: 'sidewalk', 12: 'other-ground', 13: 'building',
-                               14: 'fence', 15: 'vegetation', 16: 'trunk', 17: 'terrain', 18: 'pole',
+        self.label_to_names = {0: 'unlabeled',
+                               1: 'car',
+                               2: 'bicycle',
+                               3: 'motorcycle',
+                               4: 'truck',
+                               5: 'other-vehicle',
+                               6: 'person',
+                               7: 'bicyclist',
+                               8: 'motorcyclist',
+                               9: 'road',
+                               10: 'parking',
+                               11: 'sidewalk',
+                               12: 'other-ground',
+                               13: 'building',
+                               14: 'fence',
+                               15: 'vegetation',
+                               16: 'trunk',
+                               17: 'terrain',
+                               18: 'pole',
                                19: 'traffic-sign'}
         self.num_classes = len(self.label_to_names)
         self.label_values = np.sort([k for k, v in self.label_to_names.items()])
@@ -35,6 +50,7 @@ class SemanticKITTI:
         self.possibility = []
         self.min_possibility = []
 
+    # Generate the input data flow
     def get_batch_gen(self, split):
         if split == 'training':
             num_per_epoch = int(len(self.train_list) / cfg.batch_size) * cfg.batch_size
@@ -204,14 +220,17 @@ if __name__ == '__main__':
         tester = ModelTester(model, dataset, restore_snap=chosen_snap)
         tester.test(model, dataset)
     else:
+        ##################
+        # Visualize data #
+        ##################
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
             sess.run(dataset.train_init_op)
             while True:
-                a = sess.run(dataset.flat_inputs)
-                pos = a[0]
-                sub_pos1 = a[1]
-                label = a[21]
-                Plot.draw_pc_sem_ins(pos[0, :, :], label[0, :])
-                Plot.draw_pc_sem_ins(sub_pos1[0, :, :], label[0, 0:np.shape(sub_pos1)[1]], fix_color_num=14)
+                flat_inputs = sess.run(dataset.flat_inputs)
+                pc_xyz = flat_inputs[0]
+                sub_pc_xyz = flat_inputs[1]
+                labels = flat_inputs[21]
+                Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :], cfg.num_classes + 1)
+                Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]], cfg.num_classes + 1)

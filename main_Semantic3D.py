@@ -14,14 +14,20 @@ class Semantic3D:
     def __init__(self):
         self.name = 'Semantic3D'
         self.path = '/data/semantic3d'
-        self.label_to_names = {0: 'unlabeled', 1: 'man-made terrain', 2: 'natural terrain', 3: 'high vegetation',
-                               4: 'low vegetation', 5: 'buildings', 6: 'hard scape', 7: 'scanning artefacts', 8: 'cars'}
+        self.label_to_names = {0: 'unlabeled',
+                               1: 'man-made terrain',
+                               2: 'natural terrain',
+                               3: 'high vegetation',
+                               4: 'low vegetation',
+                               5: 'buildings',
+                               6: 'hard scape',
+                               7: 'scanning artefacts',
+                               8: 'cars'}
         self.num_classes = len(self.label_to_names)
         self.label_values = np.sort([k for k, v in self.label_to_names.items()])
         self.label_to_idx = {l: i for i, l in enumerate(self.label_values)}
         self.ignored_labels = np.sort([0])
 
-        # Original data path
         self.original_folder = join(self.path, 'original_data')
         self.full_pc_folder = join(self.path, 'original_ply')
         self.sub_pc_folder = join(self.path, 'input_{:.3f}'.format(cfg.sub_grid_size))
@@ -30,7 +36,7 @@ class Semantic3D:
         self.all_splits = [0, 1, 4, 5, 3, 4, 3, 0, 1, 2, 3, 4, 2, 0, 5]
         self.val_split = 1
 
-        # train files
+        # Initial training-validation-testing files
         self.train_files = []
         self.val_files = []
         self.test_files = []
@@ -149,6 +155,7 @@ class Semantic3D:
         print('finished')
         return
 
+    # Generate the input data flow
     def get_batch_gen(self, split):
         if split == 'training':
             num_per_epoch = cfg.train_steps * cfg.batch_size
@@ -162,6 +169,7 @@ class Semantic3D:
         self.min_possibility[split] = []
         self.class_weight[split] = []
 
+        # Random initialize
         for i, tree in enumerate(self.input_trees[split]):
             self.possibility[split] += [np.random.rand(tree.data.shape[0]) * 1e-3]
             self.min_possibility[split] += [float(np.min(self.possibility[split][-1]))]
@@ -175,13 +183,13 @@ class Semantic3D:
             # Generator loop
             for i in range(num_per_epoch):  # num_per_epoch
 
-                # Choose a random cloud
+                # Choose the cloud with the lowest probability
                 cloud_idx = int(np.argmin(self.min_possibility[split]))
 
-                # choose the point with the minimum of possibility as query point
+                # choose the point with the minimum of possibility in the cloud as query point
                 point_ind = np.argmin(self.possibility[split][cloud_idx])
 
-                # Get points from tree structure
+                # Get all points within the cloud from tree structure
                 points = np.array(self.input_trees[split][cloud_idx].data, copy=False)
 
                 # Center point of input region
@@ -190,11 +198,12 @@ class Semantic3D:
                 # Add noise to the center point
                 noise = np.random.normal(scale=cfg.noise_init / 10, size=center_point.shape)
                 pick_point = center_point + noise.astype(center_point.dtype)
-
                 query_idx = self.input_trees[split][cloud_idx].query(pick_point, k=cfg.num_points)[1][0]
+
+                # Shuffle index
                 query_idx = DP.shuffle_idx(query_idx)
 
-                # Collect points and colors
+                # Get corresponding points and colors based on the index
                 queried_pc_xyz = points[query_idx]
                 queried_pc_xyz[:, 0:2] = queried_pc_xyz[:, 0:2] - pick_point[:, 0:2]
                 queried_pc_colors = self.input_colors[split][cloud_idx][query_idx]
@@ -206,6 +215,7 @@ class Semantic3D:
                     queried_pc_labels = np.array([self.label_to_idx[l] for l in queried_pc_labels])
                     queried_pt_weight = np.array([self.class_weight[split][0][n] for n in queried_pc_labels])
 
+                # Update the possibility of the selected points
                 dists = np.sum(np.square((points[query_idx] - pick_point).astype(np.float32)), axis=1)
                 delta = np.square(1 - dists / np.max(dists)) * queried_pt_weight
                 self.possibility[split][cloud_idx][query_idx] += delta
@@ -224,7 +234,7 @@ class Semantic3D:
         return gen_func, gen_types, gen_shapes
 
     def get_tf_mapping(self):
-
+        # Collect flat inputs
         def tf_map(batch_xyz, batch_features, batch_labels, batch_pc_idx, batch_cloud_idx):
             batch_features = tf.map_fn(self.tf_augment_input, [batch_xyz, batch_features], dtype=tf.float32)
             input_points = []
@@ -250,6 +260,7 @@ class Semantic3D:
 
         return tf_map
 
+    # data augmentation
     @staticmethod
     def tf_augment_input(inputs):
         xyz = inputs[0]
@@ -354,14 +365,17 @@ if __name__ == '__main__':
         tester.test(model, dataset)
 
     else:
+        ##################
+        # Visualize data #
+        ##################
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
             sess.run(dataset.train_init_op)
             while True:
-                a = sess.run(dataset.flat_inputs)
-                pos = a[0]
-                sub_pos1 = a[1]
-                label = a[21]
-                Plot.draw_pc_sem_ins(pos[0, :, :], label[0, :], cfg.num_classes + 1)
-                Plot.draw_pc_sem_ins(sub_pos1[0, :, :], label[0, 0:np.shape(sub_pos1)[1]], cfg.num_classes + 1)
+                flat_inputs = sess.run(dataset.flat_inputs)
+                pc_xyz = flat_inputs[0]
+                sub_pc_xyz = flat_inputs[1]
+                labels = flat_inputs[21]
+                Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :], cfg.num_classes + 1)
+                Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]], cfg.num_classes + 1)
