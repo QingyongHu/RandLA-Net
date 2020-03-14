@@ -110,6 +110,7 @@ class ModelTester:
                         pred = pred.astype(np.uint32)
                         pred.tofile(store_path)
                     log_out(str(dataset.test_scan_number) + ' finished', self.Log_file)
+                    self.sess.close()
                     import sys
                     sys.exit()
                 self.sess.run(dataset.test_init_op)

@@ -166,7 +166,10 @@ class ModelTester:
                         log_out('-' * len(s), self.Log_file)
                         log_out(s, self.Log_file)
                         log_out('-' * len(s) + '\n', self.Log_file)
-                        return
+                        print('finished \n')
+                        self.sess.close()
+                        import sys
+                        sys.exit()
 
                 self.sess.run(dataset.val_init_op)
                 epoch_id += 1

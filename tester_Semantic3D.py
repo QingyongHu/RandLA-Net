@@ -39,7 +39,7 @@ class ModelTester:
 
         self.log_out = open('log_test_' + str(dataset.val_split) + '.txt', 'a')
 
-    def evaluate(self, model, dataset, num_votes=100):
+    def test(self, model, dataset, num_votes=100):
 
         # Smoothing parameter for votes
         test_smooth = 0.98
@@ -132,6 +132,7 @@ class ModelTester:
 
                     t2 = time.time()
                     print('Done in {:.1f} s\n'.format(t2 - t1))
+                    self.sess.close()
                     import sys
                     sys.exit()
 

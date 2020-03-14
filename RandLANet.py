@@ -290,7 +290,7 @@ class Network:
         neighbor_xyz = self.gather_neighbour(xyz, neigh_idx)
         xyz_tile = tf.tile(tf.expand_dims(xyz, axis=2), [1, 1, tf.shape(neigh_idx)[-1], 1])
         relative_xyz = xyz_tile - neighbor_xyz
-        relative_dis = tf.reduce_sum(relative_xyz, axis=-1, keepdims=True)
+        relative_dis = tf.reduce_sum(tf.square(relative_xyz), axis=-1, keepdims=True)
         relative_feature = tf.concat([relative_dis, relative_xyz, xyz_tile, neighbor_xyz], axis=-1)
         return relative_feature
 

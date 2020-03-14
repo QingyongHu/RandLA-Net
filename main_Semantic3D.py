@@ -351,7 +351,7 @@ if __name__ == '__main__':
         chosen_step = np.sort(snap_steps)[-1]
         chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
         tester = ModelTester(model, dataset, restore_snap=chosen_snap)
-        tester.evaluate(model, dataset)
+        tester.test(model, dataset)
 
     else:
 
