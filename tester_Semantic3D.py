@@ -133,8 +133,7 @@ class ModelTester:
                     t2 = time.time()
                     print('Done in {:.1f} s\n'.format(t2 - t1))
                     self.sess.close()
-                    import sys
-                    sys.exit()
+                    return
 
                 self.sess.run(dataset.test_init_op)
                 epoch_id += 1

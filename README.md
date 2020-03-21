@@ -3,7 +3,7 @@
 
 # RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds (CVPR 2020)
 
-This is the official implementation of **RandLA-Net** (CVPR2020), a simple and efficient neural architecture for semantic segmentation of large-scale 3D point clouds. For technical details, please refer to:
+This is the official implementation of **RandLA-Net** (CVPR2020, Oral presentation), a simple and efficient neural architecture for semantic segmentation of large-scale 3D point clouds. For technical details, please refer to:
  
 **RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds** <br />
 [Qingyong Hu](https://www.cs.ox.ac.uk/people/qingyong.hu/), [Bo Yang*](https://yang7879.github.io/), [Linhai Xie](https://www.cs.ox.ac.uk/people/linhai.xie/), [Stefano Rosa](https://www.cs.ox.ac.uk/people/stefano.rosa/), [Yulan Guo](http://yulanguo.me/), [Zhihua Wang](https://www.cs.ox.ac.uk/people/zhihua.wang/), [Niki Trigoni](https://www.cs.ox.ac.uk/people/niki.trigoni/), [Andrew Markham](https://www.cs.ox.ac.uk/people/andrew.markham/). <br />
@@ -29,6 +29,9 @@ pip install -r helper_requirements.txt
 sh compile_op.sh
 ```
 
+**Update 03/21/2020, pre-trained models and results are available now.** 
+You can download the pre-trained models and results [here](https://drive.google.com/open?id=1iU8yviO3TP87-IexBXsu13g6NklwEkXB).
+Note that, please specify the model path in the main function (e.g., `main_S3DIS.py`) if you want to use the pre-trained model and have a quick try of our RandLA-Net.
 
 ### (2) S3DIS
 S3DIS dataset can be found 
@@ -125,6 +128,7 @@ Qualitative results of our RandLA-Net:
 
 ![zzz](./figs/SemanticKITTI-2.gif)    
 
+
 ### (5) Demo
 
 <p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="./figs/demo_cover.png" width="50%"></a> </p>
@@ -151,5 +155,7 @@ Licensed under the CC BY-NC-SA 4.0 license, see [LICENSE](./LICENSE).
 
 
 ### Updates
-* 02/03/2019: Code available!
+* 21/03/2020: Updating all experimental results
+* 21/03/2020: Adding pretrained models and results
+* 02/03/2020: Code available!
 * 15/11/2019: Initial release!

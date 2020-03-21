@@ -221,7 +221,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', type=int, default=0, help='the number of GPUs to use [default: 0]')
     parser.add_argument('--test_area', type=int, default=5, help='Which area to use for test, option: 1-6 [default: 5]')
-    parser.add_argument('--mode', type=str, default='train', help='options: train, test, vis')
+    parser.add_argument('--mode', type=str, default='test', help='options: train, test, vis')
+    parser.add_argument('--mode_path', type=str, default='None', help='pretrained model path')
     FLAGS = parser.parse_args()
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
@@ -239,13 +240,16 @@ if __name__ == '__main__':
     elif Mode == 'test':
         cfg.saving = False
         model = Network(dataset, cfg)
-        chosen_snapshot = -1
-        logs = np.sort([os.path.join('results', f) for f in os.listdir('results') if f.startswith('Log')])
-        chosen_folder = logs[-1]
-        snap_path = join(chosen_folder, 'snapshots')
-        snap_steps = [int(f[:-5].split('-')[-1]) for f in os.listdir(snap_path) if f[-5:] == '.meta']
-        chosen_step = np.sort(snap_steps)[-1]
-        chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
+        if FLAGS.mode_path is not 'None':
+            chosen_snap = FLAGS.mode_path
+        else:
+            chosen_snapshot = -1
+            logs = np.sort([os.path.join('results', f) for f in os.listdir('results') if f.startswith('Log')])
+            chosen_folder = logs[-1]
+            snap_path = join(chosen_folder, 'snapshots')
+            snap_steps = [int(f[:-5].split('-')[-1]) for f in os.listdir(snap_path) if f[-5:] == '.meta']
+            chosen_step = np.sort(snap_steps)[-1]
+            chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
         tester = ModelTester(model, dataset, restore_snap=chosen_snap)
         tester.test(model, dataset)
     else:

@@ -38,7 +38,7 @@ class SemanticKITTI:
         self.label_to_idx = {l: i for i, l in enumerate(self.label_values)}
         self.ignored_labels = np.sort([0])
 
-        self.val_split = 'semantickitti'
+        self.val_split = 'val'
 
         self.seq_list = np.sort(os.listdir(self.dataset_path))
         self.test_scan_number = str(test_id)
@@ -193,6 +193,7 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', type=int, default=0, help='the number of GPUs to use [default: 0]')
     parser.add_argument('--mode', type=str, default='train', help='options: train, test, vis')
     parser.add_argument('--test_area', type=str, default='14', help='options: 11,12,13,14,15,16,17,18,19,20,21')
+    parser.add_argument('--mode_path', type=str, default='None', help='pretrained model path')
     FLAGS = parser.parse_args()
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
@@ -210,13 +211,16 @@ if __name__ == '__main__':
     elif Mode == 'test':
         cfg.saving = False
         model = Network(dataset, cfg)
-        chosen_snapshot = -1
-        logs = np.sort([os.path.join('results', f) for f in os.listdir('results') if f.startswith('Log')])
-        chosen_folder = logs[-1]
-        snap_path = join(chosen_folder, 'snapshots')
-        snap_steps = [int(f[:-5].split('-')[-1]) for f in os.listdir(snap_path) if f[-5:] == '.meta']
-        chosen_step = np.sort(snap_steps)[-1]
-        chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
+        if FLAGS.mode_path is not 'None':
+            chosen_snap = FLAGS.mode_path
+        else:
+            chosen_snapshot = -1
+            logs = np.sort([os.path.join('results', f) for f in os.listdir('results') if f.startswith('Log')])
+            chosen_folder = logs[-1]
+            snap_path = join(chosen_folder, 'snapshots')
+            snap_steps = [int(f[:-5].split('-')[-1]) for f in os.listdir(snap_path) if f[-5:] == '.meta']
+            chosen_step = np.sort(snap_steps)[-1]
+            chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
         tester = ModelTester(model, dataset, restore_snap=chosen_snap)
         tester.test(model, dataset)
     else:
