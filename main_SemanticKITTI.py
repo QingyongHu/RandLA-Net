@@ -211,8 +211,8 @@ if __name__ == '__main__':
     elif Mode == 'test':
         cfg.saving = False
         model = Network(dataset, cfg)
-        if FLAGS.mode_path is not 'None':
-            chosen_snap = FLAGS.mode_path
+        if FLAGS.model_path is not 'None':
+            chosen_snap = FLAGS.model_path
         else:
             chosen_snapshot = -1
             logs = np.sort([os.path.join('results', f) for f in os.listdir('results') if f.startswith('Log')])
