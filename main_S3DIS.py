@@ -265,5 +265,5 @@ if __name__ == '__main__':
                 pc_xyz = flat_inputs[0]
                 sub_pc_xyz = flat_inputs[1]
                 labels = flat_inputs[21]
-                Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :], cfg.num_classes + 1)
-                Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]], cfg.num_classes + 1)
+                Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :])
+                Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]])

@@ -300,7 +300,7 @@ class Semantic3D:
         noise = tf.random_normal(tf.shape(transformed_xyz), stddev=cfg.augment_noise)
         transformed_xyz = transformed_xyz + noise
         rgb = features[:, :3]
-        stacked_features = tf.concat([transformed_xyz, rgb, features[:, 3:4]], axis=-1)
+        stacked_features = tf.concat([transformed_xyz, rgb], axis=-1)
         return stacked_features
 
     def init_input_pipeline(self):
@@ -381,5 +381,5 @@ if __name__ == '__main__':
                 pc_xyz = flat_inputs[0]
                 sub_pc_xyz = flat_inputs[1]
                 labels = flat_inputs[21]
-                Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :], cfg.num_classes + 1)
-                Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]], cfg.num_classes + 1)
+                Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :])
+                Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]])

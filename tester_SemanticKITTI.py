@@ -57,10 +57,8 @@ class ModelTester:
 
         test_path = join(dirname(dataset.dataset_path), 'test', 'sequences')
         makedirs(test_path) if not exists(test_path) else None
-        for seq_id in range(11, 22, 1):
-            makedirs(join(test_path, str(seq_id))) if not exists(join(test_path, str(seq_id))) else None
-            makedirs(join(test_path, str(seq_id), 'predictions')) if not exists(
-                join(test_path, str(seq_id), 'predictions')) else None
+        save_path = join(test_path, dataset.test_scan_number, 'predictions')
+        makedirs(save_path) if not exists(save_path) else None
         test_smooth = 0.98
         epoch_ind = 0
 

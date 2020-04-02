@@ -142,6 +142,8 @@ class DataProcessing:
             pc_path = join(seq_path, 'velodyne')
             if seq_id == '08':
                 val_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
+                if seq_id == test_scan_num:
+                    test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
             elif int(seq_id) >= 11 and seq_id == test_scan_num:
                 test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
             elif seq_id in ['00', '01', '02', '03', '04', '05', '06', '07', '09', '10']:
@@ -284,11 +286,16 @@ class Plot:
         return 0
 
     @staticmethod
-    def draw_pc_sem_ins(pc_xyz, pc_sem_ins, fix_color_num=None):
-        if fix_color_num is not None:
-            ins_colors = Plot.random_colors(fix_color_num + 1, seed=2)
+    def draw_pc_sem_ins(pc_xyz, pc_sem_ins, plot_colors=None):
+        """
+        pc_xyz: 3D coordinates of point clouds
+        pc_sem_ins: semantic or instance labels
+        plot_colors: custom color list
+        """
+        if plot_colors is not None:
+            ins_colors = plot_colors
         else:
-            ins_colors = Plot.random_colors(len(np.unique(pc_sem_ins)) + 1, seed=2)  # cls 14
+            ins_colors = Plot.random_colors(len(np.unique(pc_sem_ins)) + 1, seed=2)
 
         ##############################
         sem_ins_labels = np.unique(pc_sem_ins)
@@ -299,7 +306,7 @@ class Plot:
             if semins <= -1:
                 tp = [0, 0, 0]
             else:
-                if fix_color_num is not None:
+                if plot_colors is not None:
                     tp = ins_colors[semins]
                 else:
                     tp = ins_colors[id]
