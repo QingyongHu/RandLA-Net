@@ -38,7 +38,7 @@ class SemanticKITTI:
         self.label_to_idx = {l: i for i, l in enumerate(self.label_values)}
         self.ignored_labels = np.sort([0])
 
-        self.val_split = 'val'
+        self.val_split = '08'
 
         self.seq_list = np.sort(os.listdir(self.dataset_path))
         self.test_scan_number = str(test_id)

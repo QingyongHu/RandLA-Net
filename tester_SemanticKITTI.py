@@ -27,7 +27,7 @@ class ModelTester:
     def __init__(self, model, dataset, restore_snap=None):
         my_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
         self.saver = tf.train.Saver(my_vars, max_to_keep=100)
-        self.Log_file = open('log_test_' + str(dataset.val_split) + '.txt', 'a')
+        self.Log_file = open('log_test_' + dataset.name + '.txt', 'a')
 
         # Create a session for running Ops on the Graph.
         on_cpu = False

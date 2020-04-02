@@ -37,7 +37,7 @@ class ModelTester:
         self.test_probs = [np.zeros((l.data.shape[0], model.config.num_classes), dtype=np.float16)
                            for l in dataset.input_trees['test']]
 
-        self.log_out = open('log_test_' + str(dataset.val_split) + '.txt', 'a')
+        self.log_out = open('log_test_' + dataset.name + '.txt', 'a')
 
     def test(self, model, dataset, num_votes=100):
 
