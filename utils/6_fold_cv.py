@@ -43,7 +43,12 @@ if __name__ == '__main__':
         iou_list.append(iou)
     mean_iou = sum(iou_list) / 13.0
     print('eval accuracy: {}'.format(test_total_correct / float(test_total_seen)))
-
-    print('eval accuracy: {}'.format(test_total_correct / float(test_total_seen)))
     print('mean IOU:{}'.format(mean_iou))
     print(iou_list)
+
+    acc_list = []
+    for n in range(13):
+        acc = true_positive_classes[n] / float(gt_classes[n])
+        acc_list.append(acc)
+    mean_acc = sum(acc_list) / 13.0
+    print('mAcc value is :{}'.format(mean_acc))
