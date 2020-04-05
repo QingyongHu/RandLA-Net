@@ -19,7 +19,7 @@ This code has been tested with Python 3.5, Tensorflow 1.11, CUDA 9.0 and cuDNN 7
  
 - Clone the repository 
 ```
-git clone https://github.com/QingyongHu/RandLA-Net && cd RandLA-Net
+git clone --depth=1 https://github.com/QingyongHu/RandLA-Net && cd RandLA-Net
 ```
 - Setup python environment
 ```
