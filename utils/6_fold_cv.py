@@ -27,9 +27,9 @@ if __name__ == '__main__':
         labels = original_data['class']
         points = np.vstack((original_data['x'], original_data['y'], original_data['z'])).T
 
-        ##########################################################################################
+        ##################
         # Visualize data #
-        ##########################################################################################
+        ##################
         if visualization:
             colors = np.vstack((original_data['red'], original_data['green'], original_data['blue'])).T
             xyzrgb = np.concatenate([points, colors], axis=-1)
