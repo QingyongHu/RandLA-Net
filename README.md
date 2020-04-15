@@ -158,4 +158,4 @@ Licensed under the CC BY-NC-SA 4.0 license, see [LICENSE](./LICENSE).
 * 21/03/2020: Updating all experimental results
 * 21/03/2020: Adding pretrained models and results
 * 02/03/2020: Code available!
-* 15/11/2019: Initial release!
+* 15/11/2019: Initial release！
