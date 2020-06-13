@@ -11,16 +11,16 @@ sys.path.append(ROOT_DIR)
 from helper_ply import write_ply
 from helper_tool import DataProcessing as DP
 
-dataset_path = '/data/S3DIS/Stanford3dDataset_v1.2_Aligned_Version'
-anno_paths = [line.rstrip() for line in open(join(BASE_DIR, 'meta/anno_paths.txt'))]
+dataset_path = '/home/rose/projects/RandLA-Net/data/S3DIS/Stanford3dDataset_v1.2_Aligned_Version'#原始数据集
+anno_paths = [line.rstrip() for line in open(join(BASE_DIR, 'meta/anno_paths.txt'))] # RandLA-Net/utils/meta/anno_paths.txt
 anno_paths = [join(dataset_path, p) for p in anno_paths]
 
-gt_class = [x.rstrip() for x in open(join(BASE_DIR, 'meta/class_names.txt'))]
+gt_class = [x.rstrip() for x in open(join(BASE_DIR, 'meta/class_names.txt'))] # RandLA-Net/utils/meta/class_names.txt
 gt_class2label = {cls: i for i, cls in enumerate(gt_class)}
 
 sub_grid_size = 0.04
-original_pc_folder = join(dirname(dataset_path), 'original_ply')
-sub_pc_folder = join(dirname(dataset_path), 'input_{:.3f}'.format(sub_grid_size))
+original_pc_folder = join(dirname(dataset_path), 'original_ply')#原始点云文件
+sub_pc_folder = join(dirname(dataset_path), 'input_{:.3f}'.format(sub_grid_size))#input_0.040，只采样0.04的点云
 os.mkdir(original_pc_folder) if not exists(original_pc_folder) else None
 os.mkdir(sub_pc_folder) if not exists(sub_pc_folder) else None
 out_format = '.ply'
@@ -38,7 +38,7 @@ def convert_pc2ply(anno_path, save_path):
 
     for f in glob.glob(join(anno_path, '*.txt')):
         class_name = os.path.basename(f).split('_')[0]
-        if class_name not in gt_class:  # note: in some room there is 'staris' class..
+        if class_name not in gt_class:  # note: in some room there is 'staris' class..楼梯点云设为clutter杂乱
             class_name = 'clutter'
         pc = pd.read_csv(f, header=None, delim_whitespace=True).values
         labels = np.ones((pc.shape[0], 1)) * gt_class2label[class_name]
@@ -51,20 +51,20 @@ def convert_pc2ply(anno_path, save_path):
     xyz = pc_label[:, :3].astype(np.float32)
     colors = pc_label[:, 3:6].astype(np.uint8)
     labels = pc_label[:, 6].astype(np.uint8)
-    write_ply(save_path, (xyz, colors, labels), ['x', 'y', 'z', 'red', 'green', 'blue', 'class'])
+    write_ply(save_path, (xyz, colors, labels), ['x', 'y', 'z', 'red', 'green', 'blue', 'class']) # N*7
 
-    # save sub_cloud and KDTree file
+    # save sub_cloud and KDTree file 采样0.04的点云，并用KDTree的方法进行保存
     sub_xyz, sub_colors, sub_labels = DP.grid_sub_sampling(xyz, colors, labels, sub_grid_size)
     sub_colors = sub_colors / 255.0
     sub_ply_file = join(sub_pc_folder, save_path.split('/')[-1][:-4] + '.ply')
     write_ply(sub_ply_file, [sub_xyz, sub_colors, sub_labels], ['x', 'y', 'z', 'red', 'green', 'blue', 'class'])
 
-    search_tree = KDTree(sub_xyz)
+    search_tree = KDTree(sub_xyz) # 只需关注坐标
     kd_tree_file = join(sub_pc_folder, str(save_path.split('/')[-1][:-4]) + '_KDTree.pkl')
     with open(kd_tree_file, 'wb') as f:
         pickle.dump(search_tree, f)
 
-    proj_idx = np.squeeze(search_tree.query(xyz, return_distance=False))
+    proj_idx = np.squeeze(search_tree.query(xyz, return_distance=False)) # 坐标映射回原始子点云index
     proj_idx = proj_idx.astype(np.int32)
     proj_save = join(sub_pc_folder, str(save_path.split('/')[-1][:-4]) + '_proj.pkl')
     with open(proj_save, 'wb') as f:
@@ -76,5 +76,5 @@ if __name__ == '__main__':
     for annotation_path in anno_paths:
         print(annotation_path)
         elements = str(annotation_path).split('/')
-        out_file_name = elements[-3] + '_' + elements[-2] + out_format
-        convert_pc2ply(annotation_path, join(original_pc_folder, out_file_name))
+        out_file_name = elements[-3] + '_' + elements[-2] + out_format       #eg:Area_1_conferenceRoom_1.ply
+        convert_pc2ply(annotation_path, join(original_pc_folder, out_file_name)) #将原始点云转换成ply文件
