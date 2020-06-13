@@ -42,7 +42,8 @@ class ModelTester:
                            for l in dataset.input_labels['validation']]
 
     def test(self, model, dataset, num_votes=100):
-
+        
+        start_test = time.time()
         # Smoothing parameter for votes
         test_smooth = 0.95
 
