@@ -8,10 +8,10 @@ This is the official implementation of **RandLA-Net** (CVPR2020, Oral presentati
  
 **RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds** <br />
 [Qingyong Hu](https://www.cs.ox.ac.uk/people/qingyong.hu/), [Bo Yang*](https://yang7879.github.io/), [Linhai Xie](https://www.cs.ox.ac.uk/people/linhai.xie/), [Stefano Rosa](https://www.cs.ox.ac.uk/people/stefano.rosa/), [Yulan Guo](http://yulanguo.me/), [Zhihua Wang](https://www.cs.ox.ac.uk/people/zhihua.wang/), [Niki Trigoni](https://www.cs.ox.ac.uk/people/niki.trigoni/), [Andrew Markham](https://www.cs.ox.ac.uk/people/andrew.markham/). <br />
-**[[Paper](https://arxiv.org/abs/1911.11236)] [[Video](https://youtu.be/Ar3eY_lwzMk)] [[Blog](https://zhuanlan.zhihu.com/p/105433460)]** <br />
+**[[Paper](https://arxiv.org/abs/1911.11236)] [[Video](https://youtu.be/Ar3eY_lwzMk)] [[Blog](https://zhuanlan.zhihu.com/p/105433460)] [[Project page](http://randla-net.cs.ox.ac.uk/)]** <br />
  
  
-<p align="center"> <img src="figs/Fig3.png" width="100%"> </p>
+<p align="center"> <img src="http://randla-net.cs.ox.ac.uk/imgs/Fig3.png" width="100%"> </p>
 
 
 	
@@ -55,11 +55,11 @@ python utils/6_fold_cv.py
 
 Quantitative results of different approaches on S3DIS dataset (6-fold cross-validation):
 
-![a](./figs/S3DIS_table.png)
+![a](http://randla-net.cs.ox.ac.uk/imgs/S3DIS_table.png)
 
 Qualitative results of our RandLA-Net:
 
-| ![2](./figs/S3DIS_area2.gif)   | ![z](./figs/S3DIS_area3.gif) |
+| ![2](http://randla-net.cs.ox.ac.uk/imgs/S3DIS_area2.gif)   | ![z](http://randla-net.cs.ox.ac.uk/imgs/S3DIS_area3.gif) |
 | ------------------------------ | ---------------------------- |
 
 
@@ -87,11 +87,11 @@ python main_Semantic3D.py --mode test --gpu 0
 ```
 Quantitative results of different approaches on Semantic3D (reduced-8):
 
-![a](./figs/Semantic3D_table.png)
+![a](http://randla-net.cs.ox.ac.uk/imgs/Semantic3D_table.png)
 
 Qualitative results of our RandLA-Net:
 
-| ![z](./figs/Semantic3D-1.gif)    | ![z](./figs/Semantic3D-2.gif)   |
+| ![z](http://randla-net.cs.ox.ac.uk/imgs/Semantic3D-1.gif)    | ![z](http://randla-net.cs.ox.ac.uk/imgs/Semantic3D-2.gif)   |
 | -------------------------------- | ------------------------------- |
 
 
@@ -123,16 +123,16 @@ sh jobs_test_semantickitti.sh
 
 Quantitative results of different approaches on SemanticKITTI dataset:
 
-![s](./figs/SemanticKITTI_table.png)
+![s](http://randla-net.cs.ox.ac.uk/imgs/SemanticKITTI_table.png)
 
 Qualitative results of our RandLA-Net:
 
-![zzz](./figs/SemanticKITTI-2.gif)    
+![zzz](http://randla-net.cs.ox.ac.uk/imgs/SemanticKITTI-2.gif)    
 
 
 ### (5) Demo
 
-<p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="./figs/demo_cover.png" width="50%"></a> </p>
+<p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="http://randla-net.cs.ox.ac.uk/imgs/demo_cover.png" width="50%"></a> </p>
 
 
 ### Citation
