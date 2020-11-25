@@ -59,7 +59,7 @@ Quantitative results of different approaches on S3DIS dataset (6-fold cross-vali
 
 Qualitative results of our RandLA-Net:
 
-| ![2](http://randla-net.cs.ox.ac.uk/imgs/S3DIS_area2.gif)   | ![z](http://randla-net.cs.ox.ac.uk/imgs/S3DIS_area3.gif) |
+| ![2](imgs/S3DIS_area2.gif)   | ![z](imgs/S3DIS_area3.gif) |
 | ------------------------------ | ---------------------------- |
 
 
@@ -91,8 +91,9 @@ Quantitative results of different approaches on Semantic3D (reduced-8):
 
 Qualitative results of our RandLA-Net:
 
-| ![z](http://randla-net.cs.ox.ac.uk/imgs/Semantic3D-1.gif)    | ![z](http://randla-net.cs.ox.ac.uk/imgs/Semantic3D-2.gif)   |
+| ![z](imgs/Semantic3D-1.gif)    | ![z](http://randla-net.cs.ox.ac.uk/imgs/Semantic3D-2.gif)   |
 | -------------------------------- | ------------------------------- |
+| ![z](imgs/Semantic3D-3.gif)    | ![z](imgs/Semantic3D-4.gif)   |
 
 
 
@@ -127,12 +128,12 @@ Quantitative results of different approaches on SemanticKITTI dataset:
 
 Qualitative results of our RandLA-Net:
 
-![zzz](http://randla-net.cs.ox.ac.uk/imgs/SemanticKITTI-2.gif)    
+![zzz](imgs/SemanticKITTI-2.gif)    
 
 
 ### (5) Demo
 
-<p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="http://randla-net.cs.ox.ac.uk/imgs/demo_cover.png" width="50%"></a> </p>
+<p align="center"> <a href="https://youtu.be/Ar3eY_lwzMk"><img src="http://randla-net.cs.ox.ac.uk/imgs/demo_cover.png" width="80%"></a> </p>
 
 
 ### Citation
