@@ -140,11 +140,11 @@ class DataProcessing:
         for seq_id in seq_list:
             seq_path = join(dataset_path, seq_id)
             pc_path = join(seq_path, 'velodyne')
-            if seq_id == '08':
+            if seq_id == '04':
                 val_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
                 if seq_id == test_scan_num:
                     test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
-            elif int(seq_id) >= 11 and seq_id == test_scan_num:
+            elif int(seq_id) >= 0 and seq_id == test_scan_num:
                 test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
             elif seq_id in ['00', '01', '02', '03', '04', '05', '06', '07', '09', '10']:
                 train_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
