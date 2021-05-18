@@ -82,7 +82,7 @@ class ModelTester:
                 stacked_probs = np.reshape(stacked_probs, [model.config.val_batch_size,
                                                            model.config.num_points,
                                                            model.config.num_classes])
-                for j in range(np.shape(stacked_probs)[0]):
+                for j in range(len(stacked_probs)):
                     probs = stacked_probs[j, :, :]
                     inds = point_inds[j, :]
                     c_i = cloud_inds[j][0]
@@ -91,7 +91,7 @@ class ModelTester:
             except tf.errors.OutOfRangeError:
                 new_min = np.min(dataset.min_possibility)
                 log_out('Epoch {:3d}, end. Min possibility = {:.1f}'.format(epoch_ind, new_min), self.Log_file)
-                if np.min(dataset.min_possibility) > 0.5:  # 0.5
+                if new_min > 0.5:
                     log_out(' Min possibility = {:.1f}'.format(np.min(dataset.min_possibility)), self.Log_file)
                     print('\nReproject Vote #{:d}'.format(int(np.floor(new_min))))
 

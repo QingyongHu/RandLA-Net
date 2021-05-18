@@ -1,1 +1,6 @@
 .idea
+.vscode
+__pycache__
+*.o
+*.so
+train_log/

@@ -17,9 +17,9 @@ import nearest_neighbors.lib.python.nearest_neighbors as nearest_neighbors
 
 class ConfigSemanticKITTI:
     k_n = 16  # KNN
-    num_layers = 4  # Number of layers
-    num_points = 4096 * 11  # Number of input points
-    num_classes = 19  # Number of valid classes
+    num_layers = 3  # Number of layers
+    num_points = 20480  # Number of input points
+    num_classes = 17  # Number of valid classes
     sub_grid_size = 0.06  # preprocess_parameter
 
     batch_size = 6  # batch_size during training
@@ -27,9 +27,8 @@ class ConfigSemanticKITTI:
     train_steps = 500  # Number of steps per epochs
     val_steps = 100  # Number of validation steps per epoch
 
-    sub_sampling_ratio = [4, 4, 4, 4]  # sampling ratio of random sampling at each layer
-    d_out = [16, 64, 128, 256]  # feature dimension
-    num_sub_points = [num_points // 4, num_points // 16, num_points // 64, num_points // 256]
+    sub_sampling_ratio = [4, 4, 4]  # sampling ratio of random sampling at each layer
+    d_out = [16, 64, 128]  # feature dimension
 
     noise_init = 3.5  # noise initial parameter
     max_epoch = 100  # maximum epoch during training
@@ -123,10 +122,10 @@ class DataProcessing:
     @staticmethod
     def load_label_kitti(label_path, remap_lut):
         label = np.fromfile(label_path, dtype=np.uint32)
-        label = label.reshape((-1))
+        label = label.reshape(-1)
         sem_label = label & 0xFFFF  # semantic label in lower half
-        inst_label = label >> 16  # instance id in upper half
-        assert ((sem_label + (inst_label << 16) == label).all())
+        # inst_label = label >> 16  # instance id in upper half
+        # assert ((sem_label + (inst_label << 16) == label).all())
         sem_label = remap_lut[sem_label]
         return sem_label.astype(np.int32)
 
@@ -140,13 +139,13 @@ class DataProcessing:
         for seq_id in seq_list:
             seq_path = join(dataset_path, seq_id)
             pc_path = join(seq_path, 'velodyne')
-            if seq_id == '04':
+            if seq_id == '03':
                 val_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
                 if seq_id == test_scan_num:
                     test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
-            elif int(seq_id) >= 0 and seq_id == test_scan_num:
+            elif int(seq_id) >= 11 and seq_id == test_scan_num:
                 test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
-            elif seq_id in ['00', '01', '02', '03', '04', '05', '06', '07', '09', '10']:
+            elif seq_id in ['00', '01', '02', '04', '05']:
                 train_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
 
         train_file_list = np.concatenate(train_file_list, axis=0)
@@ -181,6 +180,7 @@ class DataProcessing:
 
     @staticmethod
     def shuffle_idx(x):
+        # TODO: can this be done more efficiently?
         # random shuffle the index
         idx = np.arange(len(x))
         np.random.shuffle(idx)
@@ -246,16 +246,16 @@ class DataProcessing:
     def get_class_weights(dataset_name):
         # pre-calculate the number of points in each category
         num_per_class = []
-        if dataset_name is 'S3DIS':
+        if dataset_name == 'S3DIS':
             num_per_class = np.array([3370714, 2856755, 4919229, 318158, 375640, 478001, 974733,
                                       650464, 791496, 88727, 1284130, 229758, 2272837], dtype=np.int32)
-        elif dataset_name is 'Semantic3D':
+        elif dataset_name == 'Semantic3D':
             num_per_class = np.array([5181602, 5012952, 6830086, 1311528, 10476365, 946982, 334860, 269353],
                                      dtype=np.int32)
-        elif dataset_name is 'SemanticKITTI':
-            num_per_class = np.array([55437630, 320797, 541736, 2578735, 3274484, 552662, 184064, 78858,
-                                      240942562, 17294618, 170599734, 6369672, 230413074, 101130274, 476491114,
-                                      9833174, 129609852, 4506626, 1168181])
+        elif dataset_name == 'SemanticKITTI':
+            num_per_class = np.array([4263866, 1877342, 379542, 564400, 9098556, 1527493,
+                                      57638164, 340658, 161566, 179010, 671141, 103198,
+                                      36796319, 118820, 2480862,  8663693, 25104745])
         weight = num_per_class / float(sum(num_per_class))
         ce_label_weight = 1 / (weight + 0.02)
         return np.expand_dims(ce_label_weight, axis=0)
@@ -316,11 +316,11 @@ class Plot:
             ### bbox
             valid_xyz = pc_xyz[valid_ind]
 
-            xmin = np.min(valid_xyz[:, 0]);
+            xmin = np.min(valid_xyz[:, 0])
             xmax = np.max(valid_xyz[:, 0])
-            ymin = np.min(valid_xyz[:, 1]);
+            ymin = np.min(valid_xyz[:, 1])
             ymax = np.max(valid_xyz[:, 1])
-            zmin = np.min(valid_xyz[:, 2]);
+            zmin = np.min(valid_xyz[:, 2])
             zmax = np.max(valid_xyz[:, 2])
             sem_ins_bbox.append(
                 [[xmin, ymin, zmin], [xmax, ymax, zmax], [min(tp[0], 1.), min(tp[1], 1.), min(tp[2], 1.)]])

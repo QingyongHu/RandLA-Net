@@ -2,7 +2,7 @@ from os.path import exists, join
 from os import makedirs
 from sklearn.metrics import confusion_matrix
 from helper_tool import DataProcessing as DP
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import numpy as np
 import helper_tf_util
 import time
@@ -46,7 +46,7 @@ class Network:
             self.accuracy = 0
             self.mIou_list = [0]
             self.class_weights = DP.get_class_weights(dataset.name)
-            self.Log_file = open('log_train_' + dataset.name + str(dataset.val_split) + '.txt', 'a')
+            self.Log_file = open('log_train_' + dataset.name + '.txt', 'a')
 
         with tf.variable_scope('layers'):
             self.logits = self.inference(self.inputs, self.is_training)
@@ -194,7 +194,7 @@ class Network:
                 print([t.name for t in e.op.inputs])
                 print([t.name for t in e.op.outputs])
 
-                a = 1 / 0
+                1 / 0
 
         print('finished')
         self.sess.close()
