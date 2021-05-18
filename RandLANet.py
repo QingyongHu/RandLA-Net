@@ -7,6 +7,13 @@ import numpy as np
 import helper_tf_util
 import time
 
+if tf.__version__[0] == '2':
+    from tensorflow.compat.v1 import ConfigProto
+    from tensorflow.compat.v1 import InteractiveSession
+    config = ConfigProto()
+    config.gpu_options.allow_growth = True
+    session = InteractiveSession(config=config)
+
 
 def log_out(out_str, f_out):
     f_out.write(out_str + '\n')

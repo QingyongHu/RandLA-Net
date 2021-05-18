@@ -1,5 +1,5 @@
 gast==0.2.2
-numpy==1.16.1
+numpy==1.19.1
 h5py==2.10.0
 cython==0.29.15
 open3d-python==0.3.0
@@ -7,3 +7,4 @@ pandas==0.25.3
 scikit-learn==0.21.3
 scipy==1.4.1
 PyYAML==5.1.2
+tqdm

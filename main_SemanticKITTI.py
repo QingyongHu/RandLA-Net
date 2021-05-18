@@ -7,7 +7,8 @@ from tester_SemanticKITTI import ModelTester
 import tensorflow.compat.v1 as tf
 import numpy as np
 import os, argparse, pickle
-
+if tf.__version__[0] == '2':
+    tf.disable_v2_behavior()
 
 class SemanticKITTI:
     def __init__(self, test_id):

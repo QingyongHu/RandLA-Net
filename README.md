@@ -5,5 +5,9 @@ the code RandLA-Net
 
 
 
-修改了部分代码（main tester），保证在pku数据集上不会出错
-源代码用.bak封印了起来
+现在对于原有不变情况下，对tf2也有了支持
+
+
+> 完善了helper_requirements.txt
+> 在main_SemanticKITTI 和 RandLA-Net开头添加了tf2的判断以及适配语句
+
