@@ -79,7 +79,7 @@ class Network:
             reducing_list = tf.range(self.config.num_classes, dtype=tf.int32)
             inserted_value = tf.zeros((1,), dtype=tf.int32)
             for ign_label in self.config.ignored_label_inds:
-                reducing_list = tf.concat([reducing_list[:ign_label], inserted_value, reducing_list[ign_label:]], 0)
+                reducing_list = tf.concat([reducing_list[:ign_label], inserted_value, reducing_list[1+ign_label:]], 0)
             valid_labels = tf.gather(reducing_list, valid_labels_init)
 
             self.loss = self.get_loss(valid_logits, valid_labels, self.class_weights)

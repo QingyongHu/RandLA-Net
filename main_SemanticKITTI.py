@@ -137,8 +137,8 @@ class SemanticKITTI:
 
             for i in range(cfg.num_layers):
                 neighbour_idx = tf.py_func(DP.knn_search, [batch_pc, batch_pc, cfg.k_n], tf.int32)
-                pool_i = neighbour_idx[:, :tf.shape(batch_pc)[1] // cfg.sub_sampling_ratio[i], :]
                 sub_points = batch_pc[:, :tf.shape(batch_pc)[1] // cfg.sub_sampling_ratio[i], :]
+                pool_i = neighbour_idx[:, :tf.shape(batch_pc)[1] // cfg.sub_sampling_ratio[i], :]
                 up_i = tf.py_func(DP.knn_search, [sub_points, batch_pc, 1], tf.int32)
                 input_points.append(batch_pc)
                 input_neighbors.append(neighbour_idx)
