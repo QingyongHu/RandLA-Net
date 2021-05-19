@@ -4,3 +4,8 @@ __pycache__
 *.o
 *.so
 train_log/
+results/
+test/
+utils/nearest_neighbors/knn.cpp
+utils/nearest_neighbors/lib/python/KNN_NanoFLANN-0.0.0-py3.5.egg-info
+log_train_SemanticKITTI.txt

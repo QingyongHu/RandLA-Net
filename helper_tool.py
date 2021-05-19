@@ -253,7 +253,7 @@ class DataProcessing:
             num_per_class = np.array([5181602, 5012952, 6830086, 1311528, 10476365, 946982, 334860, 269353],
                                      dtype=np.int32)
         elif dataset_name == 'SemanticKITTI':
-            num_per_class = np.array([4263866, 1877342, 379542, 564400, 9098556, 1527493,
+            num_per_class = np.array([1877342, 379542, 564400, 9098556, 1527493,
                                       57638164, 340658, 161566, 179010, 671141, 103198,
                                       36796319, 118820, 2480862,  8663693, 25104745])
         weight = num_per_class / float(sum(num_per_class))

@@ -6,6 +6,7 @@ import tensorflow.compat.v1 as tf
 import numpy as np
 import helper_tf_util
 import time
+from tqdm import tqdm
 
 if tf.__version__[0] == '2':
     from tensorflow.compat.v1 import ConfigProto
@@ -79,7 +80,7 @@ class Network:
             reducing_list = tf.range(self.config.num_classes, dtype=tf.int32)
             inserted_value = tf.zeros((1,), dtype=tf.int32)
             for ign_label in self.config.ignored_label_inds:
-                reducing_list = tf.concat([reducing_list[:ign_label], inserted_value, reducing_list[1+ign_label:]], 0)
+                reducing_list = tf.concat([reducing_list[:ign_label], inserted_value, reducing_list[ign_label:]], 0)
             valid_labels = tf.gather(reducing_list, valid_labels_init)
 
             self.loss = self.get_loss(valid_logits, valid_labels, self.class_weights)
@@ -217,9 +218,7 @@ class Network:
         val_total_correct = 0
         val_total_seen = 0
 
-        for step_id in range(self.config.val_steps):
-            if step_id % 50 == 0:
-                print(str(step_id) + ' / ' + str(self.config.val_steps))
+        for _ in tqdm(self.config.val_steps):
             try:
                 ops = (self.prob_logits, self.labels, self.accuracy)
                 stacked_prob, labels, acc = self.sess.run(ops, {self.is_training: False})
