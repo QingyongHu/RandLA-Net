@@ -17,18 +17,18 @@ import nearest_neighbors.lib.python.nearest_neighbors as nearest_neighbors
 
 class ConfigSemanticKITTI:
     k_n = 16  # KNN
-    num_layers = 3  # Number of layers
+    num_layers = 4  # Number of layers
     num_points = 20480  # Number of input points
-    num_classes = 17  # Number of valid classes
-    sub_grid_size = 0.06  # preprocess_parameter
+    num_classes = 16  # Number of valid classes
+    sub_grid_size = 0.12  # preprocess_parameter
 
     batch_size = 6  # batch_size during training
     val_batch_size = 20  # batch_size during validation and test
     train_steps = 500  # Number of steps per epochs
     val_steps = 100  # Number of validation steps per epoch
 
-    sub_sampling_ratio = [4, 4, 4]  # sampling ratio of random sampling at each layer
-    d_out = [16, 64, 128]  # feature dimension
+    sub_sampling_ratio = [4, 4, 4, 4]  # sampling ratio of random sampling at each layer
+    d_out = [16, 64, 128, 256]  # feature dimension
 
     noise_init = 3.5  # noise initial parameter
     max_epoch = 100  # maximum epoch during training
