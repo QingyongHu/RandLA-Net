@@ -55,7 +55,7 @@ class SemanticKITTI:
             path_list = self.train_list
         elif split == 'validation':
             num_per_epoch = int(len(self.val_list) / cfg.val_batch_size) * cfg.val_batch_size
-            cfg.val_steps = int(len(self.val_list) / cfg.batch_size)
+            cfg.val_steps = int(len(self.val_list) / cfg.val_batch_size)
             path_list = self.val_list
         elif split == 'test':
             num_per_epoch = int(len(self.test_list) / cfg.val_batch_size) * cfg.val_batch_size * 4
