@@ -218,7 +218,7 @@ class Network:
         val_total_correct = 0
         val_total_seen = 0
 
-        for _ in tqdm(self.config.val_steps):
+        for _ in tqdm(range(self.config.val_steps)):
             try:
                 ops = (self.prob_logits, self.labels, self.accuracy)
                 stacked_prob, labels, acc = self.sess.run(ops, {self.is_training: False})
