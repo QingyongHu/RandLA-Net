@@ -18,7 +18,7 @@ import nearest_neighbors.lib.python.nearest_neighbors as nearest_neighbors
 class ConfigSemanticKITTI:
     k_n = 16  # KNN
     num_layers = 4  # Number of layers
-    num_points = 20480  # Number of input points
+    num_points = 40960  # Number of input points
     num_classes = 16  # Number of valid classes
     sub_grid_size = 0.12  # preprocess_parameter
 
@@ -145,7 +145,7 @@ class DataProcessing:
                     test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
             elif int(seq_id) >= 11 and seq_id == test_scan_num:
                 test_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
-            elif seq_id in ['00', '01', '02', '04', '05']:
+            else:
                 train_file_list.append([join(pc_path, f) for f in np.sort(os.listdir(pc_path))])
 
         train_file_list = np.concatenate(train_file_list, axis=0)

@@ -17,9 +17,8 @@ max_key = max(remap_dict.keys())
 remap_lut = np.zeros((max_key + 100), dtype=np.int32)
 remap_lut[list(remap_dict.keys())] = list(remap_dict.values())
 
-grid_size = 0.12
 dataset_path = '/data/semantic_kitti/dataset/sequences'
-output_path = '/data/semantic_kitti/dataset/sequences' + '_' + str(grid_size)
+output_path = '/data/semantic_kitti/dataset/sequences_full'
 seq_list = np.sort(os.listdir(dataset_path))
 
 for seq_id in seq_list:
@@ -40,13 +39,14 @@ for seq_id in seq_list:
     for scan_id in tqdm(scan_list):
         points = DP.load_pc_kitti(join(pc_path, scan_id))
         labels = DP.load_label_kitti(join(label_path, str(scan_id[:-4]) + '.label'), remap_lut)
-        sub_points, sub_labels = DP.grid_sub_sampling(points, labels=labels, grid_size=grid_size)
-        search_tree = KDTree(sub_points)
+        labels = np.expand_dims(labels, 1)
+        search_tree = KDTree(points)
         KDTree_save = join(KDTree_path_out, str(scan_id[:-4]) + '.pkl')
-        np.save(join(pc_path_out, scan_id)[:-4], sub_points)
-        np.save(join(label_path_out, scan_id)[:-4], sub_labels)
+        np.save(join(pc_path_out, scan_id)[:-4], points)
+        np.save(join(label_path_out, scan_id)[:-4], labels)
         with open(KDTree_save, 'wb') as f:
             pickle.dump(search_tree, f)
+        continue
         if seq_id == '03':
             proj_path = join(seq_path_out, 'proj')
             os.makedirs(proj_path) if not exists(proj_path) else None
