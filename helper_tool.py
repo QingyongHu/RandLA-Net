@@ -18,7 +18,7 @@ import nearest_neighbors.lib.python.nearest_neighbors as nearest_neighbors
 class ConfigSemanticKITTI:
     k_n = 16  # KNN
     num_layers = 4  # Number of layers
-    num_points = 40960  # Number of input points
+    num_points = 20480  # Number of input points
     num_classes = 16  # Number of valid classes
     sub_grid_size = 0.12  # preprocess_parameter
 

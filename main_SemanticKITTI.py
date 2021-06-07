@@ -13,7 +13,7 @@ if tf.__version__[0] == '2':
 class SemanticKITTI:
     def __init__(self, test_id):
         self.name = 'SemanticKITTI'
-        self.dataset_path = '/data/semantic_kitti/dataset/sequences_full'
+        self.dataset_path = '/data/semantic_kitti/dataset/sequences_0.06'
         self.label_to_names = {0: 'unlabeled',
                                1: '1 person',
                                2: '2+ person',
