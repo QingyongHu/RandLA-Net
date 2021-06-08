@@ -145,6 +145,14 @@ If you find our work useful in your research, please consider citing:
 	  journal={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
 	  year={2020}
 	}
+	
+	@article{hu2021learning,
+	  title={Learning Semantic Segmentation of Large-Scale Point Clouds with Random Sampling},
+	  author={Hu, Qingyong and Yang, Bo and Xie, Linhai and Rosa, Stefano and Guo, Yulan and Wang, Zhihua and Trigoni, Niki and Markham, Andrew},
+	  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	  year={2021},
+	  publisher={IEEE}
+	}
 
 
 ### Acknowledgment
@@ -167,4 +175,6 @@ Licensed under the CC BY-NC-SA 4.0 license, see [LICENSE](./LICENSE).
 2. [SensatUrban: Learning Semantics from Urban-Scale Photogrammetric Point Clouds](https://github.com/QingyongHu/SpinNet) ![GitHub stars](https://img.shields.io/github/stars/QingyongHu/SensatUrban.svg?style=flat&label=Star)
 3. [3D-BoNet: Learning Object Bounding Boxes for 3D Instance Segmentation on Point Clouds](https://github.com/Yang7879/3D-BoNet) ![GitHub stars](https://img.shields.io/github/stars/Yang7879/3D-BoNet.svg?style=flat&label=Star)
 4. [SpinNet: Learning a General Surface Descriptor for 3D Point Cloud Registration](https://github.com/QingyongHu/SpinNet) ![GitHub stars](https://img.shields.io/github/stars/QingyongHu/SpinNet.svg?style=flat&label=Star)
+5. [SQN: Weakly-Supervised Semantic Segmentation of Large-Scale 3D Point Clouds with 1000x Fewer Labels](https://github.com/QingyongHu/SQN) ![GitHub stars](https://img.shields.io/github/stars/QingyongHu/SQN.svg?style=flat&label=Star)
+
 
