@@ -205,8 +205,8 @@ class S3DIS:
         self.batch_val_data = self.val_data.batch(cfg.val_batch_size)
         map_func = self.get_tf_mapping2()
 
-        self.batch_train_data = self.batch_train_data.map(map_func=map_func)
-        self.batch_val_data = self.batch_val_data.map(map_func=map_func)
+        self.batch_train_data = self.batch_train_data.map(map_func=map_func,num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        self.batch_val_data = self.batch_val_data.map(map_func=map_func,num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
         self.batch_train_data = self.batch_train_data.prefetch(cfg.batch_size)
         self.batch_val_data = self.batch_val_data.prefetch(cfg.val_batch_size)
