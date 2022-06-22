@@ -1,4 +1,4 @@
-numpy==1.16.1
+numpy==1.22.0
 h5py==2.10.0
 cython==0.29.15
 open3d-python==0.3.0
