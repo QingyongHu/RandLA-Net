@@ -1,1 +1,12 @@
-.idea
+.vscode
+
+*.o
+*.so
+*.cpp
+*.egg-info
+
+__pycache__/
+
+data/
+results/
+test/
