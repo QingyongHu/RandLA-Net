@@ -10,3 +10,4 @@ __pycache__/
 data/
 results/
 test/
+*log*

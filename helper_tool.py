@@ -1,4 +1,4 @@
-from open3d import linux as open3d
+import open3d
 from os.path import join
 import numpy as np
 import colorsys, random, os, sys
@@ -14,7 +14,39 @@ sys.path.append(os.path.join(BASE_DIR, 'utils'))
 import cpp_wrappers.cpp_subsampling.grid_subsampling as cpp_subsampling
 import nearest_neighbors.lib.python.nearest_neighbors as nearest_neighbors
 
+class ConfigToronto3D:
+    k_n = 16  # KNN
+    num_layers = 5  # Number of layers
+    num_points = 65536  # Number of input points
+    num_classes = 8  # Number of valid classes
+    sub_grid_size = 0.06  # preprocess_parameter
+    use_rgb = False # Use RGB
+    use_intensity = False # Use intensity
+    test_on_val = True # Use L002 to test
 
+    batch_size = 4  # batch_size during training
+    val_batch_size = 14  # batch_size during validation and test
+    train_steps = 500  # Number of steps per epochs
+    val_steps = 25  # Number of validation steps per epoch
+
+    sub_sampling_ratio = [4, 4, 4, 4, 2]  # sampling ratio of random sampling at each layer
+    d_out = [16, 64, 128, 256, 512]  # feature dimension
+
+    noise_init = 3.5  # noise initial parameter
+    max_epoch = 100  # maximum epoch during training
+    learning_rate = 1e-2  # initial learning rate
+    lr_decays = {i: 0.95 for i in range(0, 500)}  # decay rate of learning rate
+
+    train_sum_dir = 'train_log'
+    saving = True
+    saving_path = None
+
+    augment_scale_anisotropic = True
+    augment_symmetries = [True, False, False]
+    augment_rotation = 'vertical'
+    augment_scale_min = 0.8
+    augment_scale_max = 1.2
+    augment_noise = 0.001
 class ConfigSemanticKITTI:
     k_n = 16  # KNN
     num_layers = 4  # Number of layers
@@ -255,7 +287,9 @@ class DataProcessing:
         elif dataset_name is 'SemanticKITTI':
             num_per_class = np.array([55437630, 320797, 541736, 2578735, 3274484, 552662, 184064, 78858,
                                       240942562, 17294618, 170599734, 6369672, 230413074, 101130274, 476491114,
-                                      9833174, 129609852, 4506626, 1168181])
+                                      9833174, 129609852, 4506626, 1168181], dtype=np.int32)
+        elif dataset_name is 'Toronto3D':
+            num_per_class = np.array([35391894, 1449308, 4650919, 18252779, 589856, 743579, 4311631, 356463], dtype=np.int32)
         weight = num_per_class / float(sum(num_per_class))
         ce_label_weight = 1 / (weight + 0.02)
         return np.expand_dims(ce_label_weight, axis=0)
