@@ -11,7 +11,7 @@ import pickle, argparse, os
 
 
 class Toronto3D:
-    def __init__(self):
+    def __init__(self, mode='train'):
         self.name = 'Toronto3D'
         self.path = 'data/Toronto_3D'
         self.label_to_names = {0: 'unclassified',
@@ -34,11 +34,7 @@ class Toronto3D:
         self.train_files = ['L001', 'L003', 'L004']
         self.val_files = ['L002']
         self.test_files = ['L002']
-        if cfg.test_on_val and (sorted(self.test_files) != sorted(self.val_files)):
-            print('Validation and test files do not match')
-            return
 
-        self.all_splits = [0, 1, 2, 3]
         self.val_split = 3
 
         self.train_files = [os.path.join(self.full_pc_folder, files + '.ply') for files in self.train_files]
@@ -58,22 +54,26 @@ class Toronto3D:
         self.input_colors = {'training': [], 'validation': [], 'test': []}
         self.input_labels = {'training': [], 'validation': []}
 
-        self.load_sub_sampled_clouds(cfg.sub_grid_size)
+        self.load_sub_sampled_clouds(cfg.sub_grid_size, mode)
 
-    def load_sub_sampled_clouds(self, sub_grid_size):
+    def load_sub_sampled_clouds(self, sub_grid_size, mode):
 
         tree_path = join(self.path, 'input_{:.3f}'.format(sub_grid_size))
-        files = np.hstack((self.train_files, self.val_files, self.test_files))
+        if mode == 'test':
+            files = self.test_files
+        else: 
+            files = np.hstack((self.train_files, self.val_files))
 
         for i, file_path in enumerate(files):
             cloud_name = file_path.split('/')[-1][:-4]
             print('Load_pc_' + str(i) + ': ' + cloud_name)
-            if file_path in self.val_files:
-                cloud_split = 'validation'
-            elif file_path in self.train_files:
-                cloud_split = 'training'
-            else:
+            if mode == 'test':
                 cloud_split = 'test'
+            else:
+                if file_path in self.val_files:
+                    cloud_split = 'validation'
+                else:
+                    cloud_split = 'training'
 
             # Name of the input files
             kd_tree_file = join(tree_path, '{:s}_KDTree.pkl'.format(cloud_name))
@@ -104,33 +104,15 @@ class Toronto3D:
             if cloud_split in ['training', 'validation']:
                 self.input_labels[cloud_split] += [sub_labels]
 
-        if cfg.test_on_val:
-            self.input_trees['test'] = self.input_trees['validation']
-
-
-        # Get validation and test re_projection indices
-        print('\nPreparing reprojection indices for validation and test')
-
-        for i, file_path in enumerate(files):
-
-            # get cloud name and split
-            cloud_name = file_path.split('/')[-1][:-4]
-
-            # # Validation projection and labels
-            # if file_path in self.val_files:
-            #     proj_file = join(tree_path, '{:s}_proj.pkl'.format(cloud_name))
-            #     with open(proj_file, 'rb') as f:
-            #         proj_idx, labels = pickle.load(f)
-            #     self.val_proj += [proj_idx]
-            #     self.val_labels += [labels]
-
-            # Test projection
-            if file_path in self.test_files:
+            # Get test re_projection indices
+            if cloud_split == 'test':
+                print('\nPreparing reprojection indices for {}'.format(cloud_name))
                 proj_file = join(tree_path, '{:s}_proj.pkl'.format(cloud_name))
                 with open(proj_file, 'rb') as f:
                     proj_idx, labels = pickle.load(f)
                 self.test_proj += [proj_idx]
                 self.test_labels += [labels]
+
         print('finished')
         return
 
@@ -160,7 +142,7 @@ class Toronto3D:
             self.possibility[split] += [np.random.rand(tree.data.shape[0]) * 1e-3]
             self.min_possibility[split] += [float(np.min(self.possibility[split][-1]))]
 
-        if split == 'training':
+        if split != 'test':
             _, num_class_total = np.unique(np.hstack(self.input_labels[split]), return_counts=True)
             self.class_weight[split] += [np.squeeze([num_class_total / np.sum(num_class_total)], axis=0)]
 
@@ -193,13 +175,14 @@ class Toronto3D:
                 queried_pc_xyz = points[query_idx]
                 queried_pc_xyz[:, 0:2] = queried_pc_xyz[:, 0:2] - pick_point[:, 0:2]
                 queried_pc_colors = self.input_colors[split][cloud_idx][query_idx]
-                if split == 'train':
+                if split == 'test':
+                    queried_pc_labels = np.zeros(queried_pc_xyz.shape[0])
+                    queried_pt_weight = 1
+                else:
                     queried_pc_labels = self.input_labels[split][cloud_idx][query_idx]
                     queried_pc_labels = np.array([self.label_to_idx[l] for l in queried_pc_labels])
                     queried_pt_weight = np.array([self.class_weight[split][0][n] for n in queried_pc_labels])
-                else:
-                    queried_pc_labels = np.zeros(queried_pc_xyz.shape[0])
-                    queried_pt_weight = 1
+                    
 
                 # Update the possibility of the selected points
                 dists = np.sum(np.square((points[query_idx] - pick_point).astype(np.float32)), axis=1)
@@ -315,10 +298,7 @@ class Toronto3D:
     def init_test_pipeline(self):
         print('Initiating testing pipelines')
         cfg.ignored_label_inds = [self.label_to_idx[ign_label] for ign_label in self.ignored_labels]
-        if cfg.test_on_val:
-            gen_function_test,gen_types, gen_shapes = self.get_batch_gen('validation')
-        else:
-            gen_function_test,gen_types, gen_shapes = self.get_batch_gen('test')
+        gen_function_test,gen_types, gen_shapes = self.get_batch_gen('test')
 
         self.test_data = tf.data.Dataset.from_generator(gen_function_test, gen_types, gen_shapes)
         self.batch_test_data = self.test_data.batch(cfg.val_batch_size)
@@ -343,7 +323,7 @@ if __name__ == '__main__':
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
     Mode = FLAGS.mode
-    dataset = Toronto3D()
+    dataset = Toronto3D(mode=Mode)
 
     if Mode == 'train':
         dataset.init_train_pipeline()
@@ -364,10 +344,7 @@ if __name__ == '__main__':
             chosen_step = np.sort(snap_steps)[-1]
             chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
         tester = ModelTester(model, dataset, restore_snap=chosen_snap)
-        if cfg.test_on_val:
-            tester.test(model, dataset, num_votes=1, split='validation')
-        else:
-            tester.test(model, dataset, num_votes=1)
+        tester.test(model, dataset, num_votes=1)
 
     else:
         ##################

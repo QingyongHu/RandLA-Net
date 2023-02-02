@@ -22,7 +22,6 @@ class ConfigToronto3D:
     sub_grid_size = 0.06  # preprocess_parameter
     use_rgb = False # Use RGB
     use_intensity = False # Use intensity
-    test_on_val = True # Use L002 to test
 
     batch_size = 4  # batch_size during training
     val_batch_size = 14  # batch_size during validation and test

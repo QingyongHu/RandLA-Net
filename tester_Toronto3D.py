@@ -41,7 +41,7 @@ class ModelTester:
 
         self.log_out = open('log_test_' + dataset.name + '.txt', 'a')
 
-    def test(self, model, dataset, num_votes=20, split='test'):
+    def test(self, model, dataset, num_votes=20):
 
         # Smoothing parameter for votes
         test_smooth = 0.98
@@ -63,6 +63,7 @@ class ModelTester:
         step_id = 0
         epoch_id = 0
         last_min = -0.5
+        t0 = time.time()
 
         while last_min < num_votes:
 
@@ -83,16 +84,17 @@ class ModelTester:
                     self.test_probs[c_i][inds] = test_smooth * self.test_probs[c_i][inds] + (1 - test_smooth) * probs
                 step_id += 1
                 log_string('Epoch {:3d}, step {:3d}. min possibility = {:.1f}'.format(epoch_id, step_id, np.min(
-                    dataset.min_possibility[split])), self.log_out)
+                    dataset.min_possibility['test'])), self.log_out)
 
             except tf.errors.OutOfRangeError:
 
                 # Save predicted cloud
-                new_min = np.min(dataset.min_possibility[split])
+                new_min = np.min(dataset.min_possibility['test'])
                 log_string('Epoch {:3d}, end. Min possibility = {:.1f}'.format(epoch_id, new_min), self.log_out)
 
                 if last_min + 1 < new_min:
 
+                    print('Prediction done in {:.1f} s\n'.format(time.time() - t0))
                     print('Saving clouds')
 
                     # Update last_min
@@ -126,12 +128,12 @@ class ModelTester:
                         cloud_name = file_path.split('/')[-1]
                         ply_name = join(test_path, 'predictions', cloud_name)
                         write_ply(ply_name, [points, preds], ['x', 'y', 'z', 'preds'])
-                        log_string(ply_name + 'has saved', self.log_out)
+                        log_string(ply_name + ' has saved', self.log_out)
 
                         i_test += 1
 
                     t2 = time.time()
-                    print('Done in {:.1f} s\n'.format(t2 - t1))
+                    print('Reprojection and saving done in {:.1f} s\n'.format(t2 - t1))
                     self.sess.close()
                     return
 
