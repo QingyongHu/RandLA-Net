@@ -43,7 +43,7 @@ class ModelTester:
         self.config = config
         self.log_out = open('log_test_' + dataset.name + '.txt', 'a')
 
-    def test(self, model, dataset, num_votes=20, eval=False):
+    def test(self, model, dataset, num_votes=100, eval=False):
 
         # Smoothing parameter for votes
         test_smooth = 0.98
@@ -56,7 +56,7 @@ class ModelTester:
         test_path = join('test', saving_path.split('/')[-1])
         makedirs(test_path) if not exists(test_path) else None
         makedirs(join(test_path, 'predictions')) if not exists(join(test_path, 'predictions')) else None
-        makedirs(join(test_path, 'probs')) if not exists(join(test_path, 'probs')) else None
+        # makedirs(join(test_path, 'probs')) if not exists(join(test_path, 'probs')) else None
 
         #####################
         # Network predictions

@@ -315,7 +315,7 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', type=int, default=0, help='the number of GPUs to use [default: 0]')
     parser.add_argument('--mode', type=str, default='test', help='options: train, test, vis')
     parser.add_argument('--model_path', type=str, default='None', help='pretrained model path')
-    parser.add_argument('--test_eval', type=bool, default=True, help='evaluate test result on L002')
+    parser.add_argument('--test_eval', type=bool, default=False, help='evaluate test result on L002')
     FLAGS = parser.parse_args()
 
     GPU_ID = FLAGS.gpu
@@ -346,9 +346,9 @@ if __name__ == '__main__':
             chosen_snap = os.path.join(snap_path, 'snap-{:d}'.format(chosen_step))
         tester = ModelTester(model, dataset, cfg, restore_snap=chosen_snap)
         if FLAGS.test_eval:
-            tester.test(model, dataset, num_votes=1, eval=True)
+            tester.test(model, dataset, eval=True)
         else:
-            tester.test(model, dataset, num_votes=1)
+            tester.test(model, dataset)
 
     else:
         ##################
