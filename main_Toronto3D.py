@@ -205,8 +205,7 @@ class Toronto3D:
     def get_tf_mapping(self):
         # Collect flat inputs
         def tf_map(batch_xyz, batch_features, batch_labels, batch_pc_idx, batch_cloud_idx):
-            # batch_features = tf.map_fn(self.tf_augment_input, [batch_xyz, batch_features], dtype=tf.float32)
-            batch_features = batch_xyz
+            batch_features = tf.map_fn(self.tf_augment_input, [batch_xyz, batch_features], dtype=tf.float32)
             input_points = []
             input_neighbors = []
             input_pools = []
@@ -315,7 +314,7 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', type=int, default=0, help='the number of GPUs to use [default: 0]')
     parser.add_argument('--mode', type=str, default='test', help='options: train, test, vis')
     parser.add_argument('--model_path', type=str, default='None', help='pretrained model path')
-    parser.add_argument('--test_eval', type=bool, default=False, help='evaluate test result on L002')
+    parser.add_argument('--test_eval', type=bool, default=True, help='evaluate test result on L002')
     FLAGS = parser.parse_args()
 
     GPU_ID = FLAGS.gpu
