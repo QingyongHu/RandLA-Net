@@ -7,6 +7,8 @@ import numpy as np
 import helper_tf_util
 import time
 
+import warnings
+warnings.simplefilter(action="ignore", category=FutureWarning)
 
 def log_out(out_str, f_out):
     f_out.write(out_str + '\n')
