@@ -4,5 +4,5 @@ cython==0.29.15
 open3d-python==0.3.0
 pandas==0.25.3
 scikit-learn==0.21.3
-scipy==1.4.1
+scipy==1.10.0
 PyYAML==5.4
