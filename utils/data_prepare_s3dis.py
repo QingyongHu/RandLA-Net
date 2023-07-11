@@ -3,6 +3,8 @@ from os.path import join, exists, dirname, abspath
 import numpy as np
 import pandas as pd
 import os, sys, glob, pickle
+import platform
+os_name = platform.system()
 
 BASE_DIR = dirname(abspath(__file__))
 ROOT_DIR = dirname(BASE_DIR)
@@ -56,17 +58,26 @@ def convert_pc2ply(anno_path, save_path):
     # save sub_cloud and KDTree file
     sub_xyz, sub_colors, sub_labels = DP.grid_sub_sampling(xyz, colors, labels, sub_grid_size)
     sub_colors = sub_colors / 255.0
-    sub_ply_file = join(sub_pc_folder, save_path.split('/')[-1][:-4] + '.ply')
+    if os_name == 'Windows':
+        sub_ply_file = join(sub_pc_folder, save_path.split('\\')[-1][:-4] + '.ply')
+    else:
+        sub_ply_file = join(sub_pc_folder, save_path.split('/')[-1][:-4] + '.ply')
     write_ply(sub_ply_file, [sub_xyz, sub_colors, sub_labels], ['x', 'y', 'z', 'red', 'green', 'blue', 'class'])
 
     search_tree = KDTree(sub_xyz)
-    kd_tree_file = join(sub_pc_folder, str(save_path.split('/')[-1][:-4]) + '_KDTree.pkl')
+    if os_name == 'Windows':
+        kd_tree_file = join(sub_pc_folder, str(save_path.split('\\')[-1][:-4]) + '_KDTree.pkl')
+    else:
+        kd_tree_file = join(sub_pc_folder, str(save_path.split('/')[-1][:-4]) + '_KDTree.pkl')
     with open(kd_tree_file, 'wb') as f:
         pickle.dump(search_tree, f)
 
     proj_idx = np.squeeze(search_tree.query(xyz, return_distance=False))
     proj_idx = proj_idx.astype(np.int32)
-    proj_save = join(sub_pc_folder, str(save_path.split('/')[-1][:-4]) + '_proj.pkl')
+    if os_name == 'Windows':
+        proj_save = join(sub_pc_folder, str(save_path.split('\\')[-1][:-4]) + '_proj.pkl')
+    else:
+        proj_save = join(sub_pc_folder, str(save_path.split('/')[-1][:-4]) + '_proj.pkl')
     with open(proj_save, 'wb') as f:
         pickle.dump([proj_idx, labels], f)
 
@@ -75,6 +86,9 @@ if __name__ == '__main__':
     # Note: there is an extra character in the v1.2 data in Area_5/hallway_6. It's fixed manually.
     for annotation_path in anno_paths:
         print(annotation_path)
-        elements = str(annotation_path).split('/')
+        if os_name == 'Windows':
+            elements = str(annotation_path).split('\\')
+        else:
+            elements = str(annotation_path).split('/')
         out_file_name = elements[-3] + '_' + elements[-2] + out_format
         convert_pc2ply(annotation_path, join(original_pc_folder, out_file_name))
