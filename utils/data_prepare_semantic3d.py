@@ -3,6 +3,8 @@ from os.path import join, exists, dirname, abspath
 import numpy as np
 import os, glob, pickle
 import sys
+import platform
+os_name = platform.system()
 
 BASE_DIR = dirname(abspath(__file__))
 ROOT_DIR = dirname(BASE_DIR)
@@ -20,7 +22,10 @@ os.mkdir(sub_pc_folder) if not exists(sub_pc_folder) else None
 
 for pc_path in glob.glob(join(dataset_path, '*.txt')):
     print(pc_path)
-    file_name = pc_path.split('\\')[-1][:-4]
+    if os_name == 'Windows':
+        file_name = pc_path.split('\\')[-1][:-4]
+    elif os_name == 'Linux':
+        file_name = pc_path.split('/')[-1][:-4]
 
     # check if it has already calculated
     if exists(join(sub_pc_folder, file_name + '_KDTree.pkl')):
