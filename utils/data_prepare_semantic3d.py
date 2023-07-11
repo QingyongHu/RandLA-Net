@@ -12,7 +12,7 @@ from helper_ply import write_ply
 from helper_tool import DataProcessing as DP
 
 grid_size = 0.06
-dataset_path = '/data/semantic3d/original_data'
+dataset_path = 'data/semantic3d/original_data'
 original_pc_folder = join(dirname(dataset_path), 'original_ply')
 sub_pc_folder = join(dirname(dataset_path), 'input_{:.3f}'.format(grid_size))
 os.mkdir(original_pc_folder) if not exists(original_pc_folder) else None
