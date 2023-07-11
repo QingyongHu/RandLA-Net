@@ -1,4 +1,11 @@
-from open3d import linux as open3d
+import platform
+os_name = platform.system()
+
+if os_name == 'Windows':
+    import open3d
+elif os_name == 'Linux':
+    from open3d import linux as open3d
+    
 from os.path import join
 import numpy as np
 import colorsys, random, os, sys
