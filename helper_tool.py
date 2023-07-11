@@ -3,7 +3,7 @@ os_name = platform.system()
 
 if os_name == 'Windows':
     import open3d
-elif os_name == 'Linux':
+else:
     from open3d import linux as open3d
     
 from os.path import join
