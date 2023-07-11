@@ -1,6 +1,14 @@
 @echo off
 
-set "BASE_DIR=%1%/data/semantic3d/original_data"
+set BASE_DIR=%~1
+if "%BASE_DIR%"=="" set BASE_DIR=data/semantic3d/original_data
+
+if not exist "%BASE_DIR%" (
+  mkdir "%BASE_DIR%"
+  echo Directory created: %BASE_DIR%
+) else (
+  echo Directory already exists: %BASE_DIR%
+)
 
 REM Training data
 wget -c -N http://semantic3d.net/data/point-clouds/training1/bildstein_station1_xyz_intensity_rgb.7z -P "%BASE_DIR%"
