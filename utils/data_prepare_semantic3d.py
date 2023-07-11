@@ -20,7 +20,7 @@ os.mkdir(sub_pc_folder) if not exists(sub_pc_folder) else None
 
 for pc_path in glob.glob(join(dataset_path, '*.txt')):
     print(pc_path)
-    file_name = pc_path.split('/')[-1][:-4]
+    file_name = pc_path.split('\\')[-1][:-4]
 
     # check if it has already calculated
     if exists(join(sub_pc_folder, file_name + '_KDTree.pkl')):
