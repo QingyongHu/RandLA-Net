@@ -11,7 +11,7 @@ sys.path.append(ROOT_DIR)
 from helper_ply import write_ply
 from helper_tool import DataProcessing as DP
 
-dataset_path = '/data/S3DIS/Stanford3dDataset_v1.2_Aligned_Version'
+dataset_path = 'data/S3DIS/Stanford3dDataset_v1.2_Aligned_Version'
 anno_paths = [line.rstrip() for line in open(join(BASE_DIR, 'meta/anno_paths.txt'))]
 anno_paths = [join(dataset_path, p) for p in anno_paths]
 
