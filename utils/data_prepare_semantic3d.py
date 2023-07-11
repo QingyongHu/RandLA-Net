@@ -24,7 +24,7 @@ for pc_path in glob.glob(join(dataset_path, '*.txt')):
     print(pc_path)
     if os_name == 'Windows':
         file_name = pc_path.split('\\')[-1][:-4]
-    elif os_name == 'Linux':
+    else:
         file_name = pc_path.split('/')[-1][:-4]
 
     # check if it has already calculated
